@@ -13,7 +13,7 @@ const PlayersList = React.createClass({
         return (
             <div className='col-md-3'>
                 {this.props.users.map(user => {
-                    return (<PlayerRow key={user.fullName()} user={user} />);
+                    return (<PlayerRow key={user.id} user={user} />);
                 })}
             </div>
         );

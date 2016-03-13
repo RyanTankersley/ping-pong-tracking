@@ -1,10 +1,12 @@
 /**
  * A player of a game
  * @constructor
+ * @param {number} identifier
  * @param {string} first name
  * @param {string} last name
  */
-function Player(firstName, lastName) {
+function Player(id, firstName, lastName) {
+    this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.isSelected = false;

@@ -1,6 +1,6 @@
 var Reflux = require('reflux');
 var Actions = Reflux.createActions({
-    'test': {}
+    'selectUser': {}
 });
 
 module.exports = Actions;

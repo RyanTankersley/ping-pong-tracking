@@ -1,15 +1,28 @@
-var Reflux = require('reflux');
-var Actions = require('../actions/matchupActions');
+const Reflux = require('reflux');
+const Actions = require('../actions/matchupActions');
+const User = require('../models/user');
+const _ = require('lodash');
 
 var MatchupStore = Reflux.createStore({
+    state: {},
+    
     listenables: Actions,
     
-    onTest: function(res) {
-        console.log(res);
+    onSelectUser: function(res) {
+        this.state = _.map(this.state, x => {
+            x.isSelected = (x.id === res) ? !x.isSelected : false;
+            return x;
+        });
+        
+        this.trigger(this.state);
     },
     
     getInitialState: function() {
-        return 'rawr';
+        var users = [];
+        users.push(new User(1, 'Ryan', 'Tankersley'));
+        users.push(new User(2, 'Brad', 'Fair'));
+        this.state = users;
+        return users;
     }
 });
 
