@@ -9,7 +9,6 @@ function Player(id, firstName, lastName) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
-    this.isSelected = false;
     
     this.imageUrl = function() {
         let img = 'images/people/' + this.firstName.toLowerCase() + this.lastName.toLowerCase() + '.png';

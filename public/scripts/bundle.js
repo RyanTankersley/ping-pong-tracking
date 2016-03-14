@@ -49630,11 +49630,13 @@ var PlayerRow = React.createClass({
     displayName: 'PlayerRow',
 
     propTypes: {
-        user: React.PropTypes.instanceOf(User).isRequired
+        user: React.PropTypes.instanceOf(User).isRequired,
+        isSelected: React.PropTypes.instanceOf('bool').isRequired,
+        isLeft: React.PropTypes.instanceOf('bool').isRequired
     },
 
     onRowClick: function onRowClick() {
-        Actions.selectUser(this.props.user.id);
+        Actions.selectUser({ userId: this.props.user.id, isLeft: this.props.isLeft });
     },
 
     render: function render() {
@@ -49646,9 +49648,8 @@ var PlayerRow = React.createClass({
         };
 
         var user = this.props.user;
-        console.log(user);
         var userStyle = {
-            'backgroundColor': user.isSelected ? Colors.accentColor : Colors.primaryColor,
+            'backgroundColor': this.props.isSelected ? Colors.accentColor : Colors.primaryColor,
             'color': Colors.textPrimaryColor,
             'marginBottom': '2em',
             'borderRadius': '10px',
@@ -49695,15 +49696,28 @@ var PlayersList = React.createClass({
     displayName: 'PlayersList',
 
     propTypes: {
-        users: React.PropTypes.arrayOf(User.User).isRequired
+        users: React.PropTypes.arrayOf(User.User).isRequired,
+        title: React.PropTypes.instanceOf('string').isRequired,
+        selectedPlayer: React.PropTypes.instanceOf('number').isRequired
     },
 
     render: function render() {
+        var _this = this;
+
         return React.createElement(
             'div',
             { className: 'col-md-3' },
+            React.createElement(
+                'div',
+                { className: 'row', style: { 'textAlign': 'center' } },
+                React.createElement(
+                    'h1',
+                    null,
+                    this.props.title
+                )
+            ),
             this.props.users.map(function (user) {
-                return React.createElement(PlayerRow, { key: user.id, user: user });
+                return React.createElement(PlayerRow, { key: user.id, user: user, isSelected: user.id === _this.props.selectedPlayer, isLeft: _this.props.isLeft });
             })
         );
     }
@@ -49726,6 +49740,7 @@ var Home = React.createClass({
     mixins: [Reflux.connect(MatchupStore, "currentStatus")],
 
     render: function render() {
+        var status = this.state.currentStatus;
         return React.createElement(
             'div',
             { className: 'container', style: { 'marginTop': '3em', 'padding': '0' } },
@@ -49741,7 +49756,9 @@ var Home = React.createClass({
             React.createElement(
                 'div',
                 { className: 'row' },
-                React.createElement(PlayersList, { users: this.state.currentStatus })
+                React.createElement(PlayersList, { users: status.users, selectedPlayer: status.currentMatchup.playerOne, isLeft: true, title: 'Player 1' }),
+                React.createElement('div', { className: 'col-md-6' }),
+                React.createElement(PlayersList, { users: status.users, selectedPlayer: status.currentMatchup.playerTwo, isLeft: false, title: 'Player 2' })
             )
         );
     }
@@ -49787,7 +49804,6 @@ function Player(id, firstName, lastName) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
-    this.isSelected = false;
 
     this.imageUrl = function () {
         var img = 'images/people/' + this.firstName.toLowerCase() + this.lastName.toLowerCase() + '.png';
@@ -49839,15 +49855,18 @@ var User = require('../models/user');
 var _ = require('lodash');
 
 var MatchupStore = Reflux.createStore({
-    state: {},
+    state: {
+        users: [],
+        currentMatchup: {
+            playerOne: null,
+            playerTwo: null
+        }
+    },
 
     listenables: Actions,
 
     onSelectUser: function onSelectUser(res) {
-        this.state = _.map(this.state, function (x) {
-            x.isSelected = x.id === res ? !x.isSelected : false;
-            return x;
-        });
+        if (res.isLeft) this.state.currentMatchup.playerOne = res.userId;else this.state.currentMatchup.playerTwo = res.userId;
 
         this.trigger(this.state);
     },
@@ -49856,8 +49875,8 @@ var MatchupStore = Reflux.createStore({
         var users = [];
         users.push(new User(1, 'Ryan', 'Tankersley'));
         users.push(new User(2, 'Brad', 'Fair'));
-        this.state = users;
-        return users;
+        this.state.users = users;
+        return this.state;
     }
 });
 

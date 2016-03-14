@@ -4,15 +4,21 @@ const User = require('../models/user');
 const _ = require('lodash');
 
 var MatchupStore = Reflux.createStore({
-    state: {},
+    state: {
+        users: [],
+        currentMatchup: {
+            playerOne: null,
+            playerTwo: null
+        }
+    },
     
     listenables: Actions,
     
     onSelectUser: function(res) {
-        this.state = _.map(this.state, x => {
-            x.isSelected = (x.id === res) ? !x.isSelected : false;
-            return x;
-        });
+        if(res.isLeft)
+            this.state.currentMatchup.playerOne = res.userId;
+        else
+            this.state.currentMatchup.playerTwo = res.userId;
         
         this.trigger(this.state);
     },
@@ -21,8 +27,8 @@ var MatchupStore = Reflux.createStore({
         var users = [];
         users.push(new User(1, 'Ryan', 'Tankersley'));
         users.push(new User(2, 'Brad', 'Fair'));
-        this.state = users;
-        return users;
+        this.state.users = users;
+        return this.state;
     }
 });
 

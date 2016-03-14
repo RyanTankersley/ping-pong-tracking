@@ -7,11 +7,13 @@ const Actions = require('../actions/matchupActions');
 
 const PlayerRow = React.createClass({
     propTypes: {
-        user: React.PropTypes.instanceOf(User).isRequired
+        user: React.PropTypes.instanceOf(User).isRequired,
+        isSelected: React.PropTypes.instanceOf('bool').isRequired,
+        isLeft: React.PropTypes.instanceOf('bool').isRequired
     },
     
     onRowClick: function() {
-        Actions.selectUser(this.props.user.id);
+        Actions.selectUser({userId: this.props.user.id, isLeft: this.props.isLeft});
     },
     
     render: function() {
@@ -21,9 +23,8 @@ const PlayerRow = React.createClass({
         };
         
         const user = this.props.user;
-        console.log(user);
         const userStyle = {
-            'backgroundColor': user.isSelected ? Colors.accentColor : Colors.primaryColor,
+            'backgroundColor': this.props.isSelected ? Colors.accentColor : Colors.primaryColor,
             'color': Colors.textPrimaryColor,
             'marginBottom': '2em',
             'borderRadius': '10px',
