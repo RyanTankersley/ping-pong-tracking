@@ -31,9 +31,21 @@ const PlayerRow = React.createClass({
             'fontSize': '1.5em'
         };
         
+        const contentDivStyle = {
+            'width': '80%',
+            'marginLeft': 'auto',
+            'marginRight': 'auto',
+            'textAlign': 'center'
+        };
+        
         return (
             <div className='row' style={userStyle} onMouseDown={(e) => this.onRowClick()} >
-                <span><img style={personImageStyle} src={user.imageUrl()} title={user.fullName()} alt={user.fullName()} />  {user.fullName()}</span>
+                <div style={contentDivStyle}>
+                    <img style={personImageStyle} src={user.imageUrl()} title={user.fullName()} alt={user.fullName()} />
+                </div>
+                <div style={contentDivStyle}>
+                    {user.fullName()}
+                </div>
             </div>
         );
     }

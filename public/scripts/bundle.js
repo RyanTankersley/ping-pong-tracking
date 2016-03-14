@@ -49656,16 +49656,26 @@ var PlayerRow = React.createClass({
             'fontSize': '1.5em'
         };
 
+        var contentDivStyle = {
+            'width': '80%',
+            'marginLeft': 'auto',
+            'marginRight': 'auto',
+            'textAlign': 'center'
+        };
+
         return React.createElement(
             'div',
             { className: 'row', style: userStyle, onMouseDown: function onMouseDown(e) {
                     return _this.onRowClick();
                 } },
             React.createElement(
-                'span',
-                null,
-                React.createElement('img', { style: personImageStyle, src: user.imageUrl(), title: user.fullName(), alt: user.fullName() }),
-                '  ',
+                'div',
+                { style: contentDivStyle },
+                React.createElement('img', { style: personImageStyle, src: user.imageUrl(), title: user.fullName(), alt: user.fullName() })
+            ),
+            React.createElement(
+                'div',
+                { style: contentDivStyle },
                 user.fullName()
             )
         );
@@ -49718,7 +49728,16 @@ var Home = React.createClass({
     render: function render() {
         return React.createElement(
             'div',
-            { className: 'container', style: { 'marginTop': '3em' } },
+            { className: 'container', style: { 'marginTop': '3em', 'padding': '0' } },
+            React.createElement(
+                'div',
+                { className: 'row', style: { 'textAlign': 'center' } },
+                React.createElement(
+                    'h1',
+                    null,
+                    'Ping Pong Matchup'
+                )
+            ),
             React.createElement(
                 'div',
                 { className: 'row' },
