@@ -4,6 +4,7 @@ const React = require('react');
 const User = require('../models/user');
 const Colors = require('../palette');
 const Actions = require('../actions/matchupActions');
+const PersonImage = require('./personImage.jsx');
 
 const PlayerRow = React.createClass({
     propTypes: {
@@ -19,11 +20,6 @@ const PlayerRow = React.createClass({
     },
     
     render: function() {
-        const personImageStyle = {
-            'maxHeight': '4em',
-            'maxWidth': '4em',
-        };
-        
         const user = this.props.user;
         const userStyle = {
             'backgroundColor': this.props.isDisabled ? Colors.dividerColor : this.props.isSelected ? Colors.accentColor : Colors.primaryColor,
@@ -45,7 +41,7 @@ const PlayerRow = React.createClass({
         return (
             <div className='row' style={userStyle} onMouseDown={(e) => this.onRowClick()} >
                 <div style={contentDivStyle}>
-                    <img style={personImageStyle} src={user.imageUrl()} title={user.fullName()} alt={user.fullName()} />
+                    <PersonImage person={user} width={'4em'} height={'4em'} />
                 </div>
                 <div style={contentDivStyle}>
                     {user.fullName()}

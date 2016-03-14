@@ -49622,25 +49622,39 @@ module.exports = Actions;
 'use strict';
 
 var React = require('react');
+var PersonImage = require('./personImage.jsx');
 
 var MatchupForm = React.createClass({
     displayName: 'MatchupForm',
 
     render: function render() {
         var matchup = this.props.matchup;
-        var personImageStyle = {
-            'maxHeight': '4em',
-            'maxWidth': '4em'
-        };
+        var imageSize = '8em';
         return React.createElement(
             'div',
             null,
             React.createElement(
                 'div',
+                { className: 'row', style: { 'textAlign': 'center' } },
+                React.createElement(
+                    'h1',
+                    null,
+                    'Matchup'
+                )
+            ),
+            React.createElement(
+                'div',
                 { className: 'row' },
-                React.createElement('div', { className: 'col-xs-4' }),
-                React.createElement('div', { className: 'col-xs-4' }),
-                React.createElement('div', { className: 'col-xs-4' })
+                React.createElement(
+                    'div',
+                    { className: 'col-xs-6', style: { 'textAlign': 'right' } },
+                    React.createElement(PersonImage, { person: matchup.playerOne, width: imageSize, height: imageSize })
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'col-xs-6' },
+                    React.createElement(PersonImage, { person: matchup.playerTwo, width: imageSize, height: imageSize })
+                )
             )
         );
     }
@@ -49648,13 +49662,39 @@ var MatchupForm = React.createClass({
 
 module.exports = MatchupForm;
 
-},{"react":207}],230:[function(require,module,exports){
+},{"./personImage.jsx":230,"react":207}],230:[function(require,module,exports){
+'use strict';
+
+var React = require('react');
+
+var PersonImage = React.createClass({
+    displayName: 'PersonImage',
+
+    render: function render() {
+        var person = this.props.person;
+        var personImageStyle = {
+            'height': this.props.height,
+            'width': this.props.width
+        };
+
+        var value = React.createElement('div', null);
+        console.log(person);
+        if (person !== null) value = React.createElement('img', { style: personImageStyle, src: person.imageUrl(), title: person.fullName(), alt: person.fullName() });
+
+        return value;
+    }
+});
+
+module.exports = PersonImage;
+
+},{"react":207}],231:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
 var User = require('../models/user');
 var Colors = require('../palette');
 var Actions = require('../actions/matchupActions');
+var PersonImage = require('./personImage.jsx');
 
 var PlayerRow = React.createClass({
     displayName: 'PlayerRow',
@@ -49672,11 +49712,6 @@ var PlayerRow = React.createClass({
 
     render: function render() {
         var _this = this;
-
-        var personImageStyle = {
-            'maxHeight': '4em',
-            'maxWidth': '4em'
-        };
 
         var user = this.props.user;
         var userStyle = {
@@ -49704,7 +49739,7 @@ var PlayerRow = React.createClass({
             React.createElement(
                 'div',
                 { style: contentDivStyle },
-                React.createElement('img', { style: personImageStyle, src: user.imageUrl(), title: user.fullName(), alt: user.fullName() })
+                React.createElement(PersonImage, { person: user, width: '4em', height: '4em' })
             ),
             React.createElement(
                 'div',
@@ -49717,7 +49752,7 @@ var PlayerRow = React.createClass({
 
 module.exports = PlayerRow;
 
-},{"../actions/matchupActions":228,"../models/user":234,"../palette":235,"react":207}],231:[function(require,module,exports){
+},{"../actions/matchupActions":228,"../models/user":235,"../palette":236,"./personImage.jsx":230,"react":207}],232:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -49766,7 +49801,7 @@ var PlayersList = React.createClass({
 
 module.exports = PlayersList;
 
-},{"../models/user":234,"./playerRow.jsx":230,"react":207}],232:[function(require,module,exports){
+},{"../models/user":235,"./playerRow.jsx":231,"react":207}],233:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -49812,7 +49847,7 @@ var Home = React.createClass({
 
 module.exports = Home;
 
-},{"./actions/matchupActions":228,"./components/matchupForm.jsx":229,"./components/playersList.jsx":231,"./stores/matchupStore":237,"react":207,"reflux":223}],233:[function(require,module,exports){
+},{"./actions/matchupActions":228,"./components/matchupForm.jsx":229,"./components/playersList.jsx":232,"./stores/matchupStore":238,"react":207,"reflux":223}],234:[function(require,module,exports){
 'use strict';
 
 var _createBrowserHistory = require('history/lib/createBrowserHistory');
@@ -49836,7 +49871,7 @@ render(React.createElement(
   routes
 ), document.getElementById('app'));
 
-},{"./routes.jsx":236,"history/lib/createBrowserHistory":10,"jquery":23,"react":207,"react-dom":27,"react-router":47}],234:[function(require,module,exports){
+},{"./routes.jsx":237,"history/lib/createBrowserHistory":10,"jquery":23,"react":207,"react-dom":27,"react-router":47}],235:[function(require,module,exports){
 'use strict';
 
 /**
@@ -49863,7 +49898,7 @@ function Player(id, firstName, lastName) {
 
 module.exports = Player;
 
-},{}],235:[function(require,module,exports){
+},{}],236:[function(require,module,exports){
 "use strict";
 
 var Colors = {
@@ -49879,7 +49914,7 @@ var Colors = {
 
 module.exports = Colors;
 
-},{}],236:[function(require,module,exports){
+},{}],237:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -49892,7 +49927,7 @@ var routes = React.createElement(Route, { path: '/', component: require('./home.
 
 module.exports = routes;
 
-},{"./home.jsx":232,"react":207,"react-router":47}],237:[function(require,module,exports){
+},{"./home.jsx":233,"react":207,"react-router":47}],238:[function(require,module,exports){
 'use strict';
 
 var Reflux = require('reflux');
@@ -49933,4 +49968,4 @@ var MatchupStore = Reflux.createStore({
 
 module.exports = MatchupStore;
 
-},{"../actions/matchupActions":228,"../models/user":234,"lodash":24,"reflux":223}]},{},[233]);
+},{"../actions/matchupActions":228,"../models/user":235,"lodash":24,"reflux":223}]},{},[234]);
