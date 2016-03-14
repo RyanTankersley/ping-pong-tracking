@@ -17,10 +17,10 @@ const Home = React.createClass({
                     <h1>Ping Pong Matchup</h1>
                 </div>
                 <div className='row'>
-                    <PlayersList users={status.users} selectedPlayer={status.currentMatchup.playerOne} isLeft={true} title='Player 1'/>
+                    <PlayersList users={status.users} matchup={status.currentMatchup} isLeft={true} title='Player 1'/>
                     <div className='col-md-6'>
                     </div>
-                    <PlayersList users={status.users} selectedPlayer={status.currentMatchup.playerTwo} isLeft={false} title='Player 2'/>
+                    <PlayersList users={status.users} matchup={status.currentMatchup} isLeft={false} title='Player 2'/>
                 </div>
             </div>
         );

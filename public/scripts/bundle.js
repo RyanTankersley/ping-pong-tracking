@@ -49698,11 +49698,15 @@ var PlayersList = React.createClass({
     propTypes: {
         users: React.PropTypes.arrayOf(User.User).isRequired,
         title: React.PropTypes.instanceOf('string').isRequired,
-        selectedPlayer: React.PropTypes.instanceOf('number').isRequired
+        matchup: React.PropTypes.instanceOf('object').isRequired
     },
 
     render: function render() {
         var _this = this;
+
+        var isLeft = this.props.isLeft;
+        var columnId = isLeft ? this.props.matchup.playerOne : this.props.matchup.playerTwo;
+        var oppositeColumnId = isLeft ? this.props.matchup.playerTwo : this.props.matchup.playerOne;
 
         return React.createElement(
             'div',
@@ -49717,7 +49721,7 @@ var PlayersList = React.createClass({
                 )
             ),
             this.props.users.map(function (user) {
-                return React.createElement(PlayerRow, { key: user.id, user: user, isSelected: user.id === _this.props.selectedPlayer, isLeft: _this.props.isLeft });
+                if (user.id != oppositeColumnId) return React.createElement(PlayerRow, { key: user.id, user: user, isSelected: user.id === columnId, isLeft: _this.props.isLeft });
             })
         );
     }
@@ -49756,9 +49760,9 @@ var Home = React.createClass({
             React.createElement(
                 'div',
                 { className: 'row' },
-                React.createElement(PlayersList, { users: status.users, selectedPlayer: status.currentMatchup.playerOne, isLeft: true, title: 'Player 1' }),
+                React.createElement(PlayersList, { users: status.users, matchup: status.currentMatchup, isLeft: true, title: 'Player 1' }),
                 React.createElement('div', { className: 'col-md-6' }),
-                React.createElement(PlayersList, { users: status.users, selectedPlayer: status.currentMatchup.playerTwo, isLeft: false, title: 'Player 2' })
+                React.createElement(PlayersList, { users: status.users, matchup: status.currentMatchup, isLeft: false, title: 'Player 2' })
             )
         );
     }
@@ -49866,7 +49870,8 @@ var MatchupStore = Reflux.createStore({
     listenables: Actions,
 
     onSelectUser: function onSelectUser(res) {
-        if (res.isLeft) this.state.currentMatchup.playerOne = res.userId;else this.state.currentMatchup.playerTwo = res.userId;
+        var matchup = this.state.currentMatchup;
+        if (res.isLeft) matchup.playerOne = res.userId === matchup.playerOne ? null : res.userId;else matchup.playerTwo = res.userId === matchup.playerTwo ? null : res.userId;
 
         this.trigger(this.state);
     },
