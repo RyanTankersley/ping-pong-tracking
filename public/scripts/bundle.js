@@ -49632,11 +49632,12 @@ var PlayerRow = React.createClass({
     propTypes: {
         user: React.PropTypes.instanceOf(User).isRequired,
         isSelected: React.PropTypes.instanceOf('bool').isRequired,
+        isDisabled: React.PropTypes.instanceOf('bool').isRequired,
         isLeft: React.PropTypes.instanceOf('bool').isRequired
     },
 
     onRowClick: function onRowClick() {
-        Actions.selectUser({ userId: this.props.user.id, isLeft: this.props.isLeft });
+        if (!this.props.isDisabled) Actions.selectUser({ userId: this.props.user.id, isLeft: this.props.isLeft });
     },
 
     render: function render() {
@@ -49649,12 +49650,13 @@ var PlayerRow = React.createClass({
 
         var user = this.props.user;
         var userStyle = {
-            'backgroundColor': this.props.isSelected ? Colors.accentColor : Colors.primaryColor,
+            'backgroundColor': this.props.isDisabled ? Colors.dividerColor : this.props.isSelected ? Colors.accentColor : Colors.primaryColor,
             'color': Colors.textPrimaryColor,
             'marginBottom': '2em',
             'borderRadius': '10px',
             'padding': '.75em .3em',
-            'fontSize': '1.5em'
+            'fontSize': '1.5em',
+            'cursor': this.props.isDisabled ? 'default' : 'pointer'
         };
 
         var contentDivStyle = {
@@ -49663,6 +49665,7 @@ var PlayerRow = React.createClass({
             'marginRight': 'auto',
             'textAlign': 'center'
         };
+        console.log(this.props.isDisabled);
 
         return React.createElement(
             'div',
@@ -49721,7 +49724,7 @@ var PlayersList = React.createClass({
                 )
             ),
             this.props.users.map(function (user) {
-                if (user.id != oppositeColumnId) return React.createElement(PlayerRow, { key: user.id, user: user, isSelected: user.id === columnId, isLeft: _this.props.isLeft });
+                return React.createElement(PlayerRow, { key: user.id, user: user, isSelected: user.id === columnId, isDisabled: user.id === oppositeColumnId, isLeft: _this.props.isLeft });
             })
         );
     }

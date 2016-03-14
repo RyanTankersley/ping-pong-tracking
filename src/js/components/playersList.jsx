@@ -22,8 +22,7 @@ const PlayersList = React.createClass({
                     <h1>{this.props.title}</h1>
                 </div>
                 {this.props.users.map(user => {
-                    if(user.id != oppositeColumnId)
-                        return (<PlayerRow key={user.id} user={user} isSelected={user.id === columnId} isLeft={this.props.isLeft}/>);
+                    return (<PlayerRow key={user.id} user={user} isSelected={user.id === columnId} isDisabled={user.id === oppositeColumnId} isLeft={this.props.isLeft}/>);
                 })}
             </div>
         );
