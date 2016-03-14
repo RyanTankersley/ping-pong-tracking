@@ -16,10 +16,14 @@ var MatchupStore = Reflux.createStore({
     
     onSelectUser: function(res) {
         var matchup = this.state.currentMatchup;
+        var user = _.find(this.state.users, user => {
+            return user.id === res.user.id;
+        });
+        
         if(res.isLeft)
-            matchup.playerOne = res.userId === matchup.playerOne ? null : res.userId;
+            matchup.playerOne = res.user === matchup.playerOne ? null : user;
         else
-            matchup.playerTwo = res.userId === matchup.playerTwo ? null : res.userId;
+            matchup.playerTwo = res.user === matchup.playerTwo ? null : user;
         
         this.trigger(this.state);
     },

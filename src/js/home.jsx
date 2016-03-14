@@ -3,6 +3,7 @@
 const React = require('react');
 const Reflux = require('reflux');
 const PlayersList = require('./components/playersList.jsx');
+const MatchupForm = require('./components/matchupForm.jsx');
 const MatchupStore = require('./stores/matchupStore');
 const Actions = require('./actions/matchupActions');
 
@@ -19,6 +20,7 @@ const Home = React.createClass({
                 <div className='row'>
                     <PlayersList users={status.users} matchup={status.currentMatchup} isLeft={true} title='Player 1'/>
                     <div className='col-md-6'>
+                        <MatchupForm matchup={status.currentMatchup} />
                     </div>
                     <PlayersList users={status.users} matchup={status.currentMatchup} isLeft={false} title='Player 2'/>
                 </div>

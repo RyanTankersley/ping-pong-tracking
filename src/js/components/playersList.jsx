@@ -5,6 +5,10 @@ const User = require('../models/user');
 const PlayerRow = require('./playerRow.jsx');
 
 const PlayersList = React.createClass({
+    getNullOrId: function(user) {
+        return user === null || user === undefined ? null : user.id;
+    },
+    
     propTypes: {
         users: React.PropTypes.arrayOf(User.User).isRequired,
         title: React.PropTypes.instanceOf('string').isRequired,
@@ -12,9 +16,10 @@ const PlayersList = React.createClass({
     },
     
     render: function() {
+        const matchup = this.props.matchup;
         const isLeft = this.props.isLeft;
-        const columnId = isLeft ? this.props.matchup.playerOne : this.props.matchup.playerTwo;
-        const oppositeColumnId = isLeft ? this.props.matchup.playerTwo : this.props.matchup.playerOne;
+        const columnId = isLeft ? this.getNullOrId(matchup.playerOne) : this.getNullOrId(matchup.playerTwo);
+        const oppositeColumnId = isLeft ? this.getNullOrId(matchup.playerTwo) : this.getNullOrId(matchup.playerOne);
         
         return (
             <div className='col-md-3'>

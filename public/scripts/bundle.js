@@ -49622,6 +49622,36 @@ module.exports = Actions;
 'use strict';
 
 var React = require('react');
+
+var MatchupForm = React.createClass({
+    displayName: 'MatchupForm',
+
+    render: function render() {
+        var matchup = this.props.matchup;
+        var personImageStyle = {
+            'maxHeight': '4em',
+            'maxWidth': '4em'
+        };
+        return React.createElement(
+            'div',
+            null,
+            React.createElement(
+                'div',
+                { className: 'row' },
+                React.createElement('div', { className: 'col-xs-4' }),
+                React.createElement('div', { className: 'col-xs-4' }),
+                React.createElement('div', { className: 'col-xs-4' })
+            )
+        );
+    }
+});
+
+module.exports = MatchupForm;
+
+},{"react":207}],230:[function(require,module,exports){
+'use strict';
+
+var React = require('react');
 var User = require('../models/user');
 var Colors = require('../palette');
 var Actions = require('../actions/matchupActions');
@@ -49637,7 +49667,7 @@ var PlayerRow = React.createClass({
     },
 
     onRowClick: function onRowClick() {
-        if (!this.props.isDisabled) Actions.selectUser({ userId: this.props.user.id, isLeft: this.props.isLeft });
+        if (!this.props.isDisabled) Actions.selectUser({ user: this.props.user, isLeft: this.props.isLeft });
     },
 
     render: function render() {
@@ -49665,7 +49695,6 @@ var PlayerRow = React.createClass({
             'marginRight': 'auto',
             'textAlign': 'center'
         };
-        console.log(this.props.isDisabled);
 
         return React.createElement(
             'div',
@@ -49688,7 +49717,7 @@ var PlayerRow = React.createClass({
 
 module.exports = PlayerRow;
 
-},{"../actions/matchupActions":228,"../models/user":233,"../palette":234,"react":207}],230:[function(require,module,exports){
+},{"../actions/matchupActions":228,"../models/user":234,"../palette":235,"react":207}],231:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -49697,6 +49726,10 @@ var PlayerRow = require('./playerRow.jsx');
 
 var PlayersList = React.createClass({
     displayName: 'PlayersList',
+
+    getNullOrId: function getNullOrId(user) {
+        return user === null || user === undefined ? null : user.id;
+    },
 
     propTypes: {
         users: React.PropTypes.arrayOf(User.User).isRequired,
@@ -49707,9 +49740,10 @@ var PlayersList = React.createClass({
     render: function render() {
         var _this = this;
 
+        var matchup = this.props.matchup;
         var isLeft = this.props.isLeft;
-        var columnId = isLeft ? this.props.matchup.playerOne : this.props.matchup.playerTwo;
-        var oppositeColumnId = isLeft ? this.props.matchup.playerTwo : this.props.matchup.playerOne;
+        var columnId = isLeft ? this.getNullOrId(matchup.playerOne) : this.getNullOrId(matchup.playerTwo);
+        var oppositeColumnId = isLeft ? this.getNullOrId(matchup.playerTwo) : this.getNullOrId(matchup.playerOne);
 
         return React.createElement(
             'div',
@@ -49732,12 +49766,13 @@ var PlayersList = React.createClass({
 
 module.exports = PlayersList;
 
-},{"../models/user":233,"./playerRow.jsx":229,"react":207}],231:[function(require,module,exports){
+},{"../models/user":234,"./playerRow.jsx":230,"react":207}],232:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
 var Reflux = require('reflux');
 var PlayersList = require('./components/playersList.jsx');
+var MatchupForm = require('./components/matchupForm.jsx');
 var MatchupStore = require('./stores/matchupStore');
 var Actions = require('./actions/matchupActions');
 
@@ -49764,7 +49799,11 @@ var Home = React.createClass({
                 'div',
                 { className: 'row' },
                 React.createElement(PlayersList, { users: status.users, matchup: status.currentMatchup, isLeft: true, title: 'Player 1' }),
-                React.createElement('div', { className: 'col-md-6' }),
+                React.createElement(
+                    'div',
+                    { className: 'col-md-6' },
+                    React.createElement(MatchupForm, { matchup: status.currentMatchup })
+                ),
                 React.createElement(PlayersList, { users: status.users, matchup: status.currentMatchup, isLeft: false, title: 'Player 2' })
             )
         );
@@ -49773,7 +49812,7 @@ var Home = React.createClass({
 
 module.exports = Home;
 
-},{"./actions/matchupActions":228,"./components/playersList.jsx":230,"./stores/matchupStore":236,"react":207,"reflux":223}],232:[function(require,module,exports){
+},{"./actions/matchupActions":228,"./components/matchupForm.jsx":229,"./components/playersList.jsx":231,"./stores/matchupStore":237,"react":207,"reflux":223}],233:[function(require,module,exports){
 'use strict';
 
 var _createBrowserHistory = require('history/lib/createBrowserHistory');
@@ -49797,7 +49836,7 @@ render(React.createElement(
   routes
 ), document.getElementById('app'));
 
-},{"./routes.jsx":235,"history/lib/createBrowserHistory":10,"jquery":23,"react":207,"react-dom":27,"react-router":47}],233:[function(require,module,exports){
+},{"./routes.jsx":236,"history/lib/createBrowserHistory":10,"jquery":23,"react":207,"react-dom":27,"react-router":47}],234:[function(require,module,exports){
 'use strict';
 
 /**
@@ -49824,7 +49863,7 @@ function Player(id, firstName, lastName) {
 
 module.exports = Player;
 
-},{}],234:[function(require,module,exports){
+},{}],235:[function(require,module,exports){
 "use strict";
 
 var Colors = {
@@ -49840,7 +49879,7 @@ var Colors = {
 
 module.exports = Colors;
 
-},{}],235:[function(require,module,exports){
+},{}],236:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -49853,7 +49892,7 @@ var routes = React.createElement(Route, { path: '/', component: require('./home.
 
 module.exports = routes;
 
-},{"./home.jsx":231,"react":207,"react-router":47}],236:[function(require,module,exports){
+},{"./home.jsx":232,"react":207,"react-router":47}],237:[function(require,module,exports){
 'use strict';
 
 var Reflux = require('reflux');
@@ -49874,7 +49913,11 @@ var MatchupStore = Reflux.createStore({
 
     onSelectUser: function onSelectUser(res) {
         var matchup = this.state.currentMatchup;
-        if (res.isLeft) matchup.playerOne = res.userId === matchup.playerOne ? null : res.userId;else matchup.playerTwo = res.userId === matchup.playerTwo ? null : res.userId;
+        var user = _.find(this.state.users, function (user) {
+            return user.id === res.user.id;
+        });
+
+        if (res.isLeft) matchup.playerOne = res.user === matchup.playerOne ? null : user;else matchup.playerTwo = res.user === matchup.playerTwo ? null : user;
 
         this.trigger(this.state);
     },
@@ -49890,4 +49933,4 @@ var MatchupStore = Reflux.createStore({
 
 module.exports = MatchupStore;
 
-},{"../actions/matchupActions":228,"../models/user":233,"lodash":24,"reflux":223}]},{},[232]);
+},{"../actions/matchupActions":228,"../models/user":234,"lodash":24,"reflux":223}]},{},[233]);

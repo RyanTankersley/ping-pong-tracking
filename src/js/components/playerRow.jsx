@@ -15,7 +15,7 @@ const PlayerRow = React.createClass({
     
     onRowClick: function() {
         if(!this.props.isDisabled)
-            Actions.selectUser({userId: this.props.user.id, isLeft: this.props.isLeft});
+            Actions.selectUser({user: this.props.user, isLeft: this.props.isLeft});
     },
     
     render: function() {
@@ -41,7 +41,6 @@ const PlayerRow = React.createClass({
             'marginRight': 'auto',
             'textAlign': 'center'
         };
-        console.log(this.props.isDisabled);
         
         return (
             <div className='row' style={userStyle} onMouseDown={(e) => this.onRowClick()} >
