@@ -11,7 +11,10 @@ const Home = React.createClass({
     
     render: function() {
         return (
-            <div className='container' style={{'marginTop': '3em'}}>
+            <div className='container' style={{'marginTop': '3em', 'padding': '0'}}>
+                <div className='row' style={{'textAlign': 'center'}}>
+                    <h1>Ping Pong Matchup</h1>
+                </div>
                 <div className='row'>
                     <PlayersList users={this.state.currentStatus}/>
                 </div>
