@@ -9,7 +9,6 @@ const PersonImage = React.createClass({
         };
         
         var value = (<div></div>);
-        console.log(person);
         if(person !== null)
             value = (<img style={personImageStyle} src={person.imageUrl()} title={person.fullName()} alt={person.fullName()} />);
             

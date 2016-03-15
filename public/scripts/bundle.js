@@ -49678,7 +49678,6 @@ var PersonImage = React.createClass({
         };
 
         var value = React.createElement('div', null);
-        console.log(person);
         if (person !== null) value = React.createElement('img', { style: personImageStyle, src: person.imageUrl(), title: person.fullName(), alt: person.fullName() });
 
         return value;
